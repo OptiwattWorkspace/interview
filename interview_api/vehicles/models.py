@@ -4,9 +4,11 @@ from django.db import models
 class Vehicle(models.Model):
     EMISSIONS_CHARGING_PLAN = 'emissions_plan'
     MONEY_CHARGING_PLAN = 'money_plan'
+    FAST_CHARGING_PLAN = 'fast_plan'
     CHARGING_PLANS = [
         (EMISSIONS_CHARGING_PLAN, 'Emissions Charging Plan'),
         (MONEY_CHARGING_PLAN, 'Money Charging Plan'),
+        (FAST_CHARGING_PLAN, 'Fast Charging Plan'),
     ]
 
     friendly_name = models.CharField(max_length=255)
