@@ -10,11 +10,11 @@ export const ForecastContext = createContext({
 
 
 export const ForecastContextProvider = ({ children }) => {
-  const [data, setData] = useState([]);
+  const [forecast, setForecast] = useState([]);
 
   const fetchForecast = async () => {
     const response = await axios.get(GetForecast);
-    setData(response.data);
+    setForecast(response.data);
   }
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const ForecastContextProvider = ({ children }) => {
 
   const { Provider } = ForecastContext;
   return (
-    <Provider value={{forecast: data, fetch: fetchForecast}}>
+    <Provider value={{forecast, fetchForecast}}>
       {children}
     </Provider>
   )
