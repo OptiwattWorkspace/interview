@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         """
           INSERT INTO vehicles_vehicle (friendly_name, charging_plan, charger_kw, battery_capacity, target_battery_pct, current_battery_pct)
           VALUES
-          ('Tesla Cybertruck', 'money_plan', 11, 200, 90, 31),
+          ('Tesla Cybertruck', 'money_plan', 11, 200, 65, 90),
           ('Tesla Model 3', 'emissions_plan', 10, 82, 85, 35);
 
           INSERT INTO vehicles_usagerates (kwh_cost, hour_of_day, is_weekday)
