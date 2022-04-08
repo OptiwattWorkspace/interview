@@ -1,10 +1,11 @@
 import math
 from datetime import datetime, timedelta
 from typing import List
+from abc import ABC, abstractmethod
 from vehicles.models import Period, UsageRates, Vehicle
 
 
-class ScheduleManager():
+class ScheduleManager(ABC):
     HOURS_TO_FORECAST = 24
     DEFAULT_PERIOD_DURATION = 1
 
@@ -15,6 +16,10 @@ class ScheduleManager():
         self.vehicle = vehicle
         self.set_periods()
         self.set_period_charging_times()
+
+    @staticmethod
+    def manager_for_vehicle(vehicle: Vehicle):
+        return FastScheduleManager(vehicle=vehicle)
 
     @staticmethod
     def get_usage_rate_from_datetime(dt: datetime) -> UsageRates:
@@ -31,19 +36,11 @@ class ScheduleManager():
             start_date += delta
         return dates
 
+    @abstractmethod
     def set_period_charging_times(self) -> None:
-        hours_to_charge = math.ceil(self.vehicle.time_to_charge())
-        if hours_to_charge > 0:
-            for idx in range(len(self.periods)):
-                if idx >= hours_to_charge:
-                    self.periods[idx].estimated_battery_pct = self.vehicle.target_battery_pct
-                else:
-                    self.periods[idx].should_charge = True
-                    hours_charged = idx + 1
-                    percent_charged = ((self.vehicle.charger_kw * hours_charged) / self.vehicle.battery_capacity) * 100
-                    self.periods[idx].estimated_battery_pct = min(self.vehicle.target_battery_pct, self.vehicle.current_battery_pct + percent_charged)
+        raise NotImplementedError()
 
-    def set_periods(self) -> List[Period]:
+    def set_periods(self):
         datetimes = ScheduleManager.generate_forecasted_datetimes(
             hours_ahead=ScheduleManager.HOURS_TO_FORECAST)
 
@@ -57,3 +54,25 @@ class ScheduleManager():
                           estimated_battery_pct=self.vehicle.current_battery_pct)
 
         self.periods = list(map(datetime_to_period, datetimes))
+
+
+class FastScheduleManager(ScheduleManager):
+    def set_period_charging_times(self) -> None:
+        hours_to_charge = math.ceil(self.vehicle.time_to_charge)
+        if hours_to_charge > 0:
+            for idx in range(len(self.periods)):
+                if idx >= hours_to_charge:
+                    self.periods[idx].estimated_battery_pct = self.vehicle.target_battery_pct
+                else:
+                    self.periods[idx].should_charge = True
+                    hours_charged = idx + 1
+                    percent_charged = ((self.vehicle.charger_kw * hours_charged) / self.vehicle.battery_capacity) * 100
+                    self.periods[idx].estimated_battery_pct = min(self.vehicle.target_battery_pct, self.vehicle.current_battery_pct + percent_charged)
+
+
+class FrugalScheduleManager(ScheduleManager):
+    pass
+
+
+class EmissionsScheduleManager(ScheduleManager):
+    pass

@@ -16,6 +16,7 @@ class Vehicle(models.Model):
     target_battery_pct = models.IntegerField()
     current_battery_pct = models.IntegerField()
 
+    @property
     def time_to_charge(self):
         battery_pct_dt = abs(self.target_battery_pct - self.current_battery_pct)
         kwh_dt = battery_pct_dt * self.battery_capacity / 100
