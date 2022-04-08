@@ -9,7 +9,7 @@ class ChargeForecastView(ListView):
     model = Period
 
     def get(self, request, format=None):
-        vehicle = Vehicle.objects.first()
+        vehicle = Vehicle.objects.last()
         schedule_manager = ScheduleManager.manager_for_vehicle(vehicle)
         periods = schedule_manager.periods
         serialized_vehicle = VehicleSerializer(vehicle)
