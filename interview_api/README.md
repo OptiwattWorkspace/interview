@@ -1,7 +1,4 @@
 # Charge Scheduling
-Charge scheduling behavior is determined by the charging plan that is selected for a vehicle, stored as the `charging_plan` property of the `Vehicle` model.
-The types of plans are described below.
-
 In short, charge scheduling returns a set of hourly time periods that specify whether or not the vehicle will charge, based on a boolean flag called `should_charge`. Here is an example scheduling period:
 ```json
 {
@@ -17,6 +14,9 @@ In short, charge scheduling returns a set of hourly time periods that specify wh
   "estimated_battery_pct": 50
 }
 ```
+
+Charge scheduling behavior is determined by the charging plan that is selected for a vehicle, stored as the `charging_plan` property of the `Vehicle` model.
+The types of plans are described below.
 
 ## Fast Scheduler 🏃‍♀️
 This scheduler doesn't care about anything besides charging as fast as possible. Given a target battery percent, this plan starts charging until the target is reached.
