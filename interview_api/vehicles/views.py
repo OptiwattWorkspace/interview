@@ -1,15 +1,22 @@
 from django.views.generic import ListView
 from vehicles.classes.schedule_manager import ScheduleManager
 from django.http import JsonResponse
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.decorators import action
 
 from vehicles.models import Period, Vehicle
 from vehicles.serializers import PeriodSerializer, VehicleSerializer
 
-class ChargeForecastView(ListView):
-    model = Period
 
-    def get(self, request, format=None):
-        vehicle = Vehicle.objects.last()
+class VehicleViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+    model = Vehicle
+    serializer_class = VehicleSerializer
+    queryset = Vehicle.objects.all()
+
+    @action(detail=True, methods=['get'])
+    def forecast(self, request, pk=None):
+        vehicle = Vehicle.objects.get(pk=pk)
         schedule_manager = ScheduleManager.manager_for_vehicle(vehicle)
         periods = schedule_manager.periods
         serialized_vehicle = VehicleSerializer(vehicle)

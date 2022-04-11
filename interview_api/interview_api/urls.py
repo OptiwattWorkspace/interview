@@ -15,10 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
+from vehicles.views import  VehicleViewSet
 
-from vehicles.views import ChargeForecastView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('forecast/', ChargeForecastView.as_view()),
+    path('admin/', admin.site.urls)
 ]
+
+router = routers.SimpleRouter()
+router.register('vehicles', VehicleViewSet, 'vehicles')
+
+urlpatterns += router.urls
