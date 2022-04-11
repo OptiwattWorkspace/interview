@@ -1,11 +1,10 @@
-from django.views.generic import ListView
 from vehicles.classes.schedule_manager import ScheduleManager
 from django.http import JsonResponse
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.decorators import action
 
-from vehicles.models import Period, Vehicle
+from vehicles.models import Vehicle
 from vehicles.serializers import PeriodSerializer, VehicleSerializer
 
 
