@@ -1,55 +1,63 @@
 import './Forecast.css';
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ForecastContext } from '../../api/ForecastContext';
 import ForecastChart from '../ForecastChart';
+import Card from '../Card';
 
 
 const ForecastResponses = ({ periods, vehicle }) => {
   return (
     <div className='responses'>
       <div>
-        <div className='card'>
-          <h1 className='cardHeader'>Vehicle</h1>
+        <Card title='Vehicle'>
           <pre>
             {JSON.stringify(vehicle, null, 2)}
           </pre>
-        </div>
+        </Card>
       </div>
       <div>
-        <div className='card'>
-          <h1 className='cardHeader'>Periods</h1>
+        <Card title='Periods'>
           <pre>
             {JSON.stringify(periods, null, 2)}
           </pre>
-        </div>
+        </Card>
       </div>
     </div>
   );
 }
 
 
-const ForecastChartCard = ({ periods }) => {
+const ForecastChartCard = ({ periods, vehicle }) => {
   return (
-    <div className='card'>
-      <h1 className='cardHeader'>Forecast</h1>
+    <Card title='ChargeForecast'>
       <div className="chartContainer">
-        <ForecastChart periods={periods} />
+        <ForecastChart periods={periods} vehicle={vehicle} />
       </div>
-    </div>
+    </Card>
   );
 }
 
 
-const Forecast = () => {
-  const { forecast, fetchForecast } = useContext(ForecastContext);
+const Forecast = ({ relatedVehicleID }) => {
+  const { forecasts, fetchForecast } = useContext(ForecastContext);
 
-  const { periods, vehicle } = forecast;
+  const forecast = forecasts.find(forecast => forecast.vehicle.id === relatedVehicleID);
+
+  useEffect(() => {
+    if (!forecast && relatedVehicleID) {
+      fetchForecast(relatedVehicleID);
+    }
+  }, [forecast, relatedVehicleID])
+
+  if (!forecast) {
+    return (<></>)
+  }
 
   return (
     <div>
-      <ForecastChartCard periods={periods} />
-      <ForecastResponses {...forecast } />
+      <ForecastChartCard {...forecast} />
+      <ForecastResponses {...forecast} />
     </div>
   );
 }

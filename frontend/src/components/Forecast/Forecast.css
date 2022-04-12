@@ -1,8 +1,7 @@
 .responses {
     display: flex;
-    /* justify-content: center; */
 }
 
 .chartContainer {
-    height: 360px;
+    height: 320px;
 }

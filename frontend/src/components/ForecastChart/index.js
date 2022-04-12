@@ -1,5 +1,16 @@
 import React, { memo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import { 
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Cell,
+  ReferenceLine
+} from 'recharts';
 
 
 const formatChargeStartTime = (startTimeStr) => {
@@ -9,9 +20,25 @@ const formatChargeStartTime = (startTimeStr) => {
   return [0, 3, 6, 9].includes(hour) ? `${hour === 0 ? 12 : hour}${hourSuffix}` : '';
 }
 
-const barFill = percent => `rgba(175, 75, 251, ${percent/100})`;
+const legendValues = [
+  {
+    color: '#AF4BFB',
+    type: 'rect',
+    value: 'Idle'
+  },
+  {
+    color: '#97FB4B',
+    type: 'rect',
+    value: 'Charging'
+  },
+  {
+    color: 'red',
+    type: 'line',
+    value: 'Target Charge'
+  }
+]
 
-const ForecastChart = ({ periods }) => {
+const ForecastChart = ({ periods, vehicle }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
@@ -26,18 +53,27 @@ const ForecastChart = ({ periods }) => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="start_time" tickFormatter={formatChargeStartTime} />
+        <XAxis
+          dataKey="start_time"
+          angle={-25}
+          textAnchor="end"
+          tickFormatter={formatChargeStartTime}
+          padding={{ bottom: 200 }}
+        />
         <YAxis />
         <Tooltip />
-        <Legend />
-        <Bar dataKey="estimated_battery_pct">
+        <Legend payload={legendValues} />
+        <Bar dataKey="estimated_battery_pct" fill='#AF4BFB'>
           {
-            periods && periods.map((period, index) => <Cell key={index} fill={barFill(period.estimated_battery_pct)} />)
+            periods && periods.map((period, index) => (
+              <Cell key={index} fill={period.should_charge ? '#97FB4B' : '#AF4BFB'} />
+            ))
           }
         </Bar>
+        <ReferenceLine y={vehicle.target_battery_pct} stroke="red" strokeWidth={2} strokeDasharray="3 1" />
       </BarChart>
     </ResponsiveContainer>
   );
 };
 
-export default ForecastChart;
+export default memo(ForecastChart);

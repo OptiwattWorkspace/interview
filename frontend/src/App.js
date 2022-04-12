@@ -1,18 +1,21 @@
 import './App.css';
 
 import { ForecastContextProvider } from './api/ForecastContext';
-import Forecast from './components/Forecast/';
+import { VehiclesContextProvider } from './api/VehiclesContext';
+import Dashboard from './components/Dashboard';
 
 
 function App() {
   return (
-    <ForecastContextProvider>
-      <div className='app'>
-        <div className='appContainer'>
-          <Forecast />
+    <VehiclesContextProvider>
+      <ForecastContextProvider>
+        <div className='app'>
+          <div className='appContainer'>
+            <Dashboard />
+          </div>
         </div>
-      </div>
-    </ForecastContextProvider>
+      </ForecastContextProvider>
+    </VehiclesContextProvider>
   );
 }
 

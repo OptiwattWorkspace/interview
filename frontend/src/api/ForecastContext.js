@@ -4,27 +4,23 @@ import axios from 'axios';
 
 
 export const ForecastContext = createContext({
-  forecast: [],
-  fetch: () => { }
+  forecasts: [],
+  fetchForecast: (relatedVehicleID) => { }
 });
 
 
 export const ForecastContextProvider = ({ children }) => {
-  const [forecast, setForecast] = useState([]);
+  const [forecasts, setForecasts] = useState([]);
 
-  const fetchForecast = async () => {
-    const response = await axios.get(GetForecast);
-    setForecast(response.data);
-  }
-
-  useEffect(() => {
-    fetchForecast();
-  }, [])
-
+  const fetchForecast = async (relatedVehicleID) => {
+    const response = await axios.get(GetForecast(relatedVehicleID));
+    setForecasts(forecasts.concat(response.data));
+  };
+  
   const { Provider } = ForecastContext;
   return (
-    <Provider value={{forecast, fetchForecast}}>
+    <Provider value={{forecasts, fetchForecast}}>
       {children}
     </Provider>
-  )
+  );
 }
