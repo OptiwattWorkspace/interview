@@ -1,6 +1,6 @@
 import './Vehicles.css'
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { VehiclesContext } from '../../api/VehiclesContext';
 import Card from '../Card';
 
@@ -9,7 +9,6 @@ const Vehicles = ({ selectedVehicleID, setSelectedVehicleID }) => {
   const { vehicles } = useContext(VehiclesContext);
 
   const onVehicleRadioChange = (e) => {
-    console.log(parseInt(e.target.value))
     setSelectedVehicleID(parseInt(e.target.value));
   }
 
