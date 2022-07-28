@@ -20,8 +20,8 @@ class Vehicle(models.Model):
 
     @property
     def time_to_charge(self):
-        batter_percent_difference = abs(self.target_battery_pct - self.current_battery_pct)
-        kwh_dt = batter_percent_difference * self.battery_capacity / 100
+        battery_percent_difference = max(self.target_battery_pct - self.current_battery_pct, 0)
+        kwh_dt = battery_percent_difference * self.battery_capacity / 100
         return kwh_dt / float(self.charger_kw)
 
 class Emissions(models.Model):

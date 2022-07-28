@@ -19,7 +19,12 @@ class ScheduleManager(ABC):
 
     @staticmethod
     def manager_for_vehicle(vehicle: Vehicle):
-        return FastScheduleManager(vehicle=vehicle)
+        if vehicle.charging_plan == Vehicle.EMISSIONS_CHARGING_PLAN:
+            return EmissionsScheduleManager(vehicle)
+        elif vehicle.charging_plan == Vehicle.MONEY_CHARGING_PLAN:
+            return FrugalScheduleManager(vehicle)
+        elif vehicle.charging_plan == Vehicle.FAST_CHARGING_PLAN:
+            return FastScheduleManager(vehicle)
 
     @staticmethod
     def get_usage_rate_from_datetime(dt: datetime) -> UsageRates:
@@ -71,7 +76,17 @@ class FastScheduleManager(ScheduleManager):
 
 
 class FrugalScheduleManager(ScheduleManager):
-    pass
+    def set_period_charging_times(self) -> None:
+        min_usage_rate = min(self.periods, key=lambda p: p.usage_rates.kwh_cost).usage_rates.kwh_cost
+        hours_to_charge = math.ceil(self.vehicle.time_to_charge)
+        hours_charged = 0
+        if hours_to_charge > 0:
+            for idx in range(len(self.periods)):
+                if self.periods[idx].usage_rates.kwh_cost == min_usage_rate and hours_charged < hours_to_charge:
+                    self.periods[idx].should_charge = True
+                    hours_charged += 1
+                percent_charged = ((self.vehicle.charger_kw * hours_charged) / self.vehicle.battery_capacity) * 100
+                self.periods[idx].estimated_battery_pct = min(self.vehicle.target_battery_pct, self.vehicle.current_battery_pct + percent_charged)
 
 
 class EmissionsScheduleManager(ScheduleManager):

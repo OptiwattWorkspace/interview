@@ -1,14 +1,14 @@
 from vehicles.classes.schedule_manager import ScheduleManager
 from django.http import JsonResponse
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin, CreateModelMixin, DestroyModelMixin
 from rest_framework.decorators import action
 
 from vehicles.models import Vehicle
 from vehicles.serializers import PeriodSerializer, VehicleSerializer
 
 
-class VehicleViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
+class VehicleViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, CreateModelMixin, DestroyModelMixin):
     model = Vehicle
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
