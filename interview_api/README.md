@@ -29,3 +29,14 @@ This scheduler is saving the planet. Given a target battery percent, this plan  
 The maximum intensity threshold is defined as the minimum intensity of the periods in the next 24 hours, plus 30% of the range of the emissions of the periods.
 
 
+## Interview
+You should be receiving this repo about 24 hours prior to your interview. To make the most of the time in the interview,
+we encourage you to have the project set up and ready to go, using your preferred development environment.
+
+We've intentionally left out some getting started instructions in this README, but if you do get stuck or find any bugs, please don't hesitate to reach out.
+
+You'll know it's set up when you can run the curl below and see a response.
+
+```bash
+curl --location --request GET 'localhost:8000/vehicles'
+```
