@@ -1,0 +1,7 @@
+# Generated at runtime — never commit your actual mail or scans.
+stable_mail_scans/
+scans/
+*.xlsx
+*.csv
+raw.json
+*.pdf

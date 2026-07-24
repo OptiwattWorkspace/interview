@@ -1,0 +1,4 @@
+# Optional. The download + categorize path runs on the Python standard library
+# alone (urllib), so the ONLY dependency is for pretty .xlsx output.
+# Without openpyxl the tool still runs and writes a .csv instead.
+openpyxl>=3.1
