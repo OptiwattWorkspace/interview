@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Never commit real phone numbers or the task database.
+config.json
+*.db

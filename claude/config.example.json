@@ -1,0 +1,13 @@
+{
+  "me": "casey",
+
+  "handles": {
+    "+15555555555": "michelle"
+  },
+
+  "trigger": "/",
+
+  "poll_seconds": 2.0,
+
+  "reply_to": null
+}
